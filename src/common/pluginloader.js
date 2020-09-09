@@ -23,28 +23,33 @@ var modulemapper = require('cordova/modulemapper');
 
 // Helper function to inject a <script> tag.
 // Exported for testing.
-exports.injectScript = function (url, onload, onerror) {
+exports.injectScript = function (url, onload, onerror, retNode) {
     var script = document.createElement('script');
     // onload fires even when script fails loads with an error.
     script.onload = onload;
     // onerror fires for malformed URLs.
     script.onerror = onerror;
     script.src = url;
-    document.head.appendChild(script);
+    if (retNode) {
+        return script;
+    } else {
+        document.head.appendChild(script);
+    }
 };
 
-function injectIfNecessary (id, url, onload, onerror) {
+function injectIfNecessary (id, url, onload, onerror, retNode) {
     onerror = onerror || onload;
     if (id in define.moduleMap) {
         onload();
     } else {
-        exports.injectScript(url, function () {
+        const node = exports.injectScript(url, function () {
             if (id in define.moduleMap) {
                 onload();
             } else {
                 onerror();
             }
-        }, onerror);
+        }, onerror, retNode);
+        if (retNode) return node;
     }
 }
 
@@ -90,9 +95,16 @@ function handlePluginsObject (path, moduleList, finishPluginLoading) {
         }
     }
 
+    const frag = document.createDocumentFragment();
     for (var i = 0; i < moduleList.length; i++) {
-        injectIfNecessary(moduleList[i].id, path + moduleList[i].file, scriptLoadedCallback);
+        const script = injectIfNecessary(moduleList[i].id, path + moduleList[i].file, scriptLoadedCallback, undefined, true);
+        if (script instanceof HTMLScriptElement) {
+            frag.appendChild(script);
+        }
     }
+    requestAnimationFrame(function() {
+        document.head.appendChild(frag);
+    });
 }
 
 function findCordovaPath () {
