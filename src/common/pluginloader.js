@@ -25,6 +25,7 @@ var modulemapper = require('cordova/modulemapper');
 // Exported for testing.
 exports.injectScript = function (url, onload, onerror, retNode) {
     var script = document.createElement('script');
+    script.async = true;
     // onload fires even when script fails loads with an error.
     script.onload = onload;
     // onerror fires for malformed URLs.
