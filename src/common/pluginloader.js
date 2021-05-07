@@ -100,9 +100,84 @@ function handlePluginsObject (path, moduleList, finishPluginLoading) {
     }
 
     const frag = document.createDocumentFragment();
+    const pluginsToDelay = {
+        "cordova-plugin-background-fetch.BackgroundFetch": "cordova-plugin-background-fetch.BackgroundFetch",
+        "cordova-background-geolocation.BackgroundGeolocation": "cordova-background-geolocation.BackgroundGeolocation",
+        "cordova-background-geolocation.API": "cordova-background-geolocation.API",
+        "cordova-background-geolocation.DeviceSettings": "cordova-background-geolocation.DeviceSettings",
+        "cordova-background-geolocation.Logger": "cordova-background-geolocation.Logger",
+        "cordova-background-geolocation.TransistorAuthorizationToken": "cordova-background-geolocation.TransistorAuthorizationToken",
+        "cordova-plugin-file.DirectoryEntry": "cordova-plugin-file.DirectoryEntry",
+        "cordova-plugin-file.DirectoryReader": "cordova-plugin-file.DirectoryReader",
+        "cordova-plugin-file.Entry": "cordova-plugin-file.Entry",
+        "cordova-plugin-file.File": "cordova-plugin-file.File",
+        "cordova-plugin-file.FileEntry": "cordova-plugin-file.FileEntry",
+        "cordova-plugin-file.FileError": "cordova-plugin-file.FileError",
+        "cordova-plugin-file.FileReader": "cordova-plugin-file.FileReader",
+        "cordova-plugin-file.FileSystem": "cordova-plugin-file.FileSystem",
+        "cordova-plugin-file.FileUploadOptions": "cordova-plugin-file.FileUploadOptions",
+        "cordova-plugin-file.FileUploadResult": "cordova-plugin-file.FileUploadResult",
+        "cordova-plugin-file.FileWriter": "cordova-plugin-file.FileWriter",
+        "cordova-plugin-file.Flags": "cordova-plugin-file.Flags",
+        "cordova-plugin-file.LocalFileSystem": "cordova-plugin-file.LocalFileSystem",
+        "cordova-plugin-file.Metadata": "cordova-plugin-file.Metadata",
+        "cordova-plugin-file.ProgressEvent": "cordova-plugin-file.ProgressEvent",
+        "cordova-plugin-file.fileSystems": "cordova-plugin-file.fileSystems",
+        "cordova-plugin-file.requestFileSystem": "cordova-plugin-file.requestFileSystem",
+        "cordova-plugin-file.resolveLocalFileSystemURI": "cordova-plugin-file.resolveLocalFileSystemURI",
+        "cordova-plugin-file.isChrome": "cordova-plugin-file.isChrome",
+        "cordova-plugin-file.androidFileSystem": "cordova-plugin-file.androidFileSystem",
+        "cordova-plugin-file.fileSystems-roots": "cordova-plugin-file.fileSystems-roots",
+        "cordova-plugin-file.fileSystemPaths": "cordova-plugin-file.fileSystemPaths",
+        "cordova-plugin-file-transfer.FileTransferError": "cordova-plugin-file-transfer.FileTransferError",
+        "cordova-plugin-file-transfer.FileTransfer": "cordova-plugin-file-transfer.FileTransfer",
+        "cordova-plugin-googlemaps.Promise": "cordova-plugin-googlemaps.Promise",
+        "cordova-plugin-googlemaps.BaseClass": "cordova-plugin-googlemaps.BaseClass",
+        "cordova-plugin-googlemaps.BaseArrayClass": "cordova-plugin-googlemaps.BaseArrayClass",
+        "cordova-plugin-googlemaps.LatLng": "cordova-plugin-googlemaps.LatLng",
+        "cordova-plugin-googlemaps.LatLngBounds": "cordova-plugin-googlemaps.LatLngBounds",
+        "cordova-plugin-googlemaps.VisibleRegion": "cordova-plugin-googlemaps.VisibleRegion",
+        "cordova-plugin-googlemaps.Location": "cordova-plugin-googlemaps.Location",
+        "cordova-plugin-googlemaps.CameraPosition": "cordova-plugin-googlemaps.CameraPosition",
+        "cordova-plugin-googlemaps.Polyline": "cordova-plugin-googlemaps.Polyline",
+        "cordova-plugin-googlemaps.Polygon": "cordova-plugin-googlemaps.Polygon",
+        "cordova-plugin-googlemaps.Marker": "cordova-plugin-googlemaps.Marker",
+        "cordova-plugin-googlemaps.HtmlInfoWindow": "cordova-plugin-googlemaps.HtmlInfoWindow",
+        "cordova-plugin-googlemaps.Circle": "cordova-plugin-googlemaps.Circle",
+        "cordova-plugin-googlemaps.TileOverlay": "cordova-plugin-googlemaps.TileOverlay",
+        "cordova-plugin-googlemaps.GroundOverlay": "cordova-plugin-googlemaps.GroundOverlay",
+        "cordova-plugin-googlemaps.Common": "cordova-plugin-googlemaps.Common",
+        "cordova-plugin-googlemaps.encoding": "cordova-plugin-googlemaps.encoding",
+        "cordova-plugin-googlemaps.spherical": "cordova-plugin-googlemaps.spherical",
+        "cordova-plugin-googlemaps.poly": "cordova-plugin-googlemaps.poly",
+        "cordova-plugin-googlemaps.Geocoder": "cordova-plugin-googlemaps.Geocoder",
+        "cordova-plugin-googlemaps.LocationService": "cordova-plugin-googlemaps.LocationService",
+        "cordova-plugin-googlemaps.Map": "cordova-plugin-googlemaps.Map",
+        "cordova-plugin-googlemaps.event": "cordova-plugin-googlemaps.event",
+        "cordova-plugin-googlemaps.MapTypeId": "cordova-plugin-googlemaps.MapTypeId",
+        "cordova-plugin-googlemaps.KmlOverlay": "cordova-plugin-googlemaps.KmlOverlay",
+        "cordova-plugin-googlemaps.KmlLoader": "cordova-plugin-googlemaps.KmlLoader",
+        "cordova-plugin-googlemaps.Environment": "cordova-plugin-googlemaps.Environment",
+        "cordova-plugin-googlemaps.MarkerCluster": "cordova-plugin-googlemaps.MarkerCluster",
+        "cordova-plugin-googlemaps.Cluster": "cordova-plugin-googlemaps.Cluster",
+        "cordova-plugin-googlemaps.geomodel": "cordova-plugin-googlemaps.geomodel",
+        "cordova-plugin-googlemaps.commandQueueExecutor": "cordova-plugin-googlemaps.commandQueueExecutor",
+        "cordova-plugin-googlemaps.pluginInit": "cordova-plugin-googlemaps.pluginInit",
+        "cordova-plugin-googlemaps.StreetViewPanorama": "cordova-plugin-googlemaps.StreetViewPanorama",
+        "cordova-plugin-googlemaps.Overlay": "cordova-plugin-googlemaps.Overlay",
+        "cordova-plugin-googlemaps.Thread": "cordova-plugin-googlemaps.Thread",
+        "cordova-plugin-googlemaps.InlineWorker": "cordova-plugin-googlemaps.InlineWorker",
+        "cordova-plugin-googlemaps.googlemaps-cdv-plugin": "cordova-plugin-googlemaps.googlemaps-cdv-plugin",
+        "cordova-plugin-googlemaps.js_CordovaGoogleMaps": "cordova-plugin-googlemaps.js_CordovaGoogleMaps",
+    };
     for (var i = 0; i < moduleList.length; i++) {
-        const script = injectIfNecessary(moduleList[i].id, path + moduleList[i].file, scriptLoadedCallback, undefined, true);
+        const moduleId = moduleList[i].id;
+        const script = injectIfNecessary(moduleId, path + moduleList[i].file, scriptLoadedCallback, undefined, true);
         if (script instanceof HTMLScriptElement) {
+            if (!pluginsToDelay[moduleId]) {
+                // do not lazyload this script
+                script.async = false;
+            }
             frag.appendChild(script);
         }
     }
