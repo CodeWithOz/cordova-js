@@ -27,7 +27,7 @@ exports.injectScript = function (url, onload, onerror, retNode) {
     var script = document.createElement('script');
     if (retNode) {
         // only do this if the node will be appended to a document fragment
-        script.async = true;
+        script.defer = true;
     }
     // onload fires even when script fails loads with an error.
     script.onload = onload;
@@ -176,7 +176,7 @@ function handlePluginsObject (path, moduleList, finishPluginLoading) {
         if (script instanceof HTMLScriptElement) {
             if (!pluginsToDelay[moduleId]) {
                 // do not lazyload this script
-                script.async = false;
+                script.defer = false;
             }
             frag.appendChild(script);
         }
